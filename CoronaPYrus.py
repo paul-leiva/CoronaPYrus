@@ -1,25 +1,33 @@
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+#from selenium.webdriver.chrome.options import Options
 import matplotlib.pyplot as plt
 
 URL = 'https://bing.com/covid'
 WHO = 'https://covid19.who.int/table'
 
-
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-driver = webdriver.Chrome(options=options)
+#options = Options()
+#options.add_argument('--headless')
+#options.add_argument('--disable-gpu')
+#driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome()
 driver.get(URL)
 time.sleep(3)
+#x = driver.find_element_by_xpath('')
+x = driver.find_element_by_tag_name('path')
+x.click()
+time.sleep(1)
+#driver.quit()
 page = driver.page_source
-driver.quit()
 soup = BeautifulSoup(page, 'html.parser')
-container = soup.find('div', attrs={
-    'class':'confirmed'})
-print(container)
+total_cases = soup.find('div', attrs={'class':'confirmed'}).get_text()
+data = []
+countries = soup.find_all('div', attrs={'class':'areaName'})#.get_text()
+cases = soup.find_all('div', attrs={'class':'secondaryInfo'})#.get_text()
+print(total_cases)
+print(countries)
+print(cases)
 
 #response = requests.get(URL)
 #soup = BeautifulSoup(response.text, 'html.parser')
@@ -35,3 +43,6 @@ print(container)
 #print(soup.findAll('div', {'class': 'confirmed'}))
 #print(soup.findAll(class_ = 'areaName'))
 print(soup.title)
+
+def remove_commas() -> int:
+    return 0
