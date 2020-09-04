@@ -12,37 +12,29 @@ WHO = 'https://covid19.who.int/table'
 #options.add_argument('--disable-gpu')
 #driver = webdriver.Chrome(options=options)
 driver = webdriver.Chrome()
-driver.get(URL)
+driver.get(WHO)
 time.sleep(3)
 #x = driver.find_element_by_xpath('')
-x = driver.find_element_by_tag_name('path')
-x.click()
+#x = driver.find_element_by_tag_name('path')
+#x.click()
 time.sleep(1)
-#driver.quit()
 page = driver.page_source
+
 soup = BeautifulSoup(page, 'html.parser')
-total_cases = soup.find('div', attrs={'class':'confirmed'}).get_text()
+total_cases = soup.find('div', attrs={'class':'sc-fzplgP bfDTAo th'}).get_text()
+total_cases = total_cases.replace(",", "") # remove commas
+total_cases = int(total_cases)
 data = []
-countries = soup.find_all('div', attrs={'class':'areaName'})#.get_text()
-cases = soup.find_all('div', attrs={'class':'secondaryInfo'})#.get_text()
-print(total_cases)
-print(countries)
-print(cases)
+rows = soup.find_all('div', attrs={'role':'row'})
+driver.quit()
 
-#response = requests.get(URL)
-#soup = BeautifulSoup(response.text, 'html.parser')
+for row in rows:
+    country = row.find('span').get_text(strip=True)
+    if country == 'Name': # skip the first row
+        continue
+    cases = row.find('div', attrs={'class':'sc-fznOgF fRrkWV'}).get_text()
+    cases = cases.replace(",", "") # remove commas
+    cases = int(cases)
+    print(country + " - " + str(cases))
 
-#print(soup)
-
-#soup.find_all(class="sc-fzplgP bfDTAo th")
-
-#top_row = soup.find(attrs={"class": "sc-fzplgP bfDTAo th"})
-#top_row = filter(filter_tags, soup.find(attrs={'class': 'sc-fzplgP bfDTAo th'}).find_all(text=True))
-#for div in soup.findAll('div', {'class': 'sc-fzplgP bfDTAo th'}):
-#    print(div.contents[0])
-#print(soup.findAll('div', {'class': 'confirmed'}))
-#print(soup.findAll(class_ = 'areaName'))
-print(soup.title)
-
-def remove_commas() -> int:
-    return 0
+print('Total cases - ' + str(total_cases))
