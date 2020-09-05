@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import matplotlib.pyplot as plt
 
-URL = 'https://bing.com/covid'
-WHO = 'https://covid19.who.int/table'
+WHO = 'https://covid19.who.int/table' # the URL we will be using for this program
 
 driver = webdriver.Chrome()
 driver.get(WHO)
@@ -22,25 +21,35 @@ driver.quit()
 rest_of_world = total_cases
 countries = [] # list of top 10 countries
 case_counts = [] # list of cases
-for row in rows[1:10]: #rows 1-10 rows are top 10 countries (first row is arbitrary)
+for row in rows[1:11]: #rows 1-10 rows are top 10 countries (first row is arbitrary)
     country = row.find('span').get_text(strip=True)
-    countries.append(country)
     cases = row.find('div', attrs={'class':'sc-fznOgF fRrkWV'}).get_text()
     cases = cases.replace(",", "") # remove commas
     cases = int(cases)
+    countries.append(country + " - " + str(cases) + " cases")
     case_counts.append(cases)
     rest_of_world = rest_of_world - cases
-    #percent = (cases/total_cases) * 100
-    #percent = "%.2f" % round(percentage, 2)
     print(country + " - " + str(cases)) #+ " " + str(percent))
 
 print('Rest of world - ' + str(rest_of_world))
-countries.append("Rest of World")
+countries.append("Rest of World - " + str(rest_of_world))
 case_counts.append(rest_of_world)
+explode = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1) # detach the Rest of World slice of the pie
 print('Total cases - ' + str(total_cases))
 print(str(len(countries)) + " " + str(len(case_counts)))
 
-plt.pie(case_counts, labels=countries, autopct="%1.2f%%")
-plt.title('COVID-19 Case Distribution by Country')
+wedges = { 'linewidth' : 1, 'edgecolor' : 'black'}
+
+slices = plt.pie(case_counts,
+        labels=countries,
+        labeldistance=1.05,
+        autopct= "%.2f%%",
+        explode=explode,
+        textprops={'size': 'smaller'},
+        wedgeprops = wedges,
+        startangle=90,
+        radius = 2)
+plt.title('COVID-19 Case Distribution by Country\nThere have been ' + str(total_cases) + ' global cases.')
+
 plt.axis('equal')
 plt.show()
