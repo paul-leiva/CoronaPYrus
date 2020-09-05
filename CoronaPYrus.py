@@ -31,16 +31,15 @@ for row in rows[1:11]: #rows 1-10 rows are top 10 countries (first row is arbitr
     rest_of_world = rest_of_world - cases
     print(country + " - " + str(cases)) #+ " " + str(percent))
 
-print('Rest of world - ' + str(rest_of_world))
 countries.append("Rest of World - " + str(rest_of_world))
 case_counts.append(rest_of_world)
 explode = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1) # detach the Rest of World slice of the pie
-print('Total cases - ' + str(total_cases))
-print(str(len(countries)) + " " + str(len(case_counts)))
 
-wedges = { 'linewidth' : 1, 'edgecolor' : 'black'}
+wedges = { 'linewidth' : 1.5, 'edgecolor' : 'black'}
+slice_colors = {"red", "lime", "orange", "blue", "magenta", "cyan", # pie slice colors
+          "darkviolet", "springgreen", "yellow", "dodgerblue", "darkgray"}
 
-slices = plt.pie(case_counts,
+plt.pie(case_counts,
         labels=countries,
         labeldistance=1.05,
         autopct= "%.2f%%",
@@ -48,8 +47,8 @@ slices = plt.pie(case_counts,
         textprops={'size': 'smaller'},
         wedgeprops = wedges,
         startangle=90,
-        radius = 2)
+        colors=slice_colors,
+        radius=2)
 plt.title('COVID-19 Case Distribution by Country\nThere have been ' + str(total_cases) + ' global cases.')
-
 plt.axis('equal')
 plt.show()
