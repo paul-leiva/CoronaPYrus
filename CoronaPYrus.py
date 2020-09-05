@@ -1,22 +1,14 @@
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
-#from selenium.webdriver.chrome.options import Options
 import matplotlib.pyplot as plt
 
 URL = 'https://bing.com/covid'
 WHO = 'https://covid19.who.int/table'
 
-#options = Options()
-#options.add_argument('--headless')
-#options.add_argument('--disable-gpu')
-#driver = webdriver.Chrome(options=options)
 driver = webdriver.Chrome()
 driver.get(WHO)
 time.sleep(3)
-#x = driver.find_element_by_xpath('')
-#x = driver.find_element_by_tag_name('path')
-#x.click()
 time.sleep(1)
 page = driver.page_source
 
@@ -35,6 +27,9 @@ for row in rows:
     cases = row.find('div', attrs={'class':'sc-fznOgF fRrkWV'}).get_text()
     cases = cases.replace(",", "") # remove commas
     cases = int(cases)
-    print(country + " - " + str(cases))
+    percentage = (cases/total_cases) * 100
+    percentage = "%.2f" % round(percentage, 2)
+    print(country + " - " + str(cases) + " " + str(percentage))
+
 
 print('Total cases - ' + str(total_cases))
