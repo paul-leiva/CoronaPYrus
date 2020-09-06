@@ -16,6 +16,7 @@ page = driver.page_source
 
 soup = BeautifulSoup(page, 'html.parser')
 total_cases = soup.find('div', attrs={'class':'sc-fzplgP bfDTAo th'}).get_text()
+with_commas = total_cases
 total_cases = total_cases.replace(",", "") # remove commas
 total_cases = int(total_cases)
 rows = soup.find_all('div', attrs={'role':'row'})
@@ -27,9 +28,9 @@ case_counts = [] # list of cases
 for row in rows[1:11]: #rows 1-10 rows are top 10 countries (first row is arbitrary)
     country = row.find('span').get_text(strip=True)
     cases = row.find('div', attrs={'class':'sc-fznOgF fRrkWV'}).get_text()
+    countries.append(country + " - " + str(cases) + " cases")
     cases = cases.replace(",", "") # remove commas
     cases = int(cases)
-    countries.append(country + " - " + str(cases) + " cases")
     case_counts.append(cases)
     rest_of_world = rest_of_world - cases
 
@@ -46,12 +47,12 @@ plt.pie(case_counts,
         labeldistance=1.05,
         autopct= "%.2f%%",
         explode=explode,
-        textprops={'size': 'smaller'},
+        textprops={'fontsize': '14'},
         wedgeprops = wedges,
         startangle=90,
         colors=slice_colors,
         radius=2)
-plt.title('COVID-19 Case Distribution by Country\nThere have been ' + str(total_cases) +
+plt.title('COVID-19 Case Distribution by Country\nThere have been ' + with_commas +
           ' global cases as of ' + time.strftime("%m/%d/%Y", time.localtime()))
 plt.axis('equal')
 plt.show()
