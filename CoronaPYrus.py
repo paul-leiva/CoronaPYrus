@@ -1,3 +1,6 @@
+# Created by Paul Leiva | paul-leiva.github.io
+# Florida International University (FIU), Miami, FL, USA
+
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
