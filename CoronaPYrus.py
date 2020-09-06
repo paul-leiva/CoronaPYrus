@@ -29,9 +29,8 @@ for row in rows[1:11]: #rows 1-10 rows are top 10 countries (first row is arbitr
     countries.append(country + " - " + str(cases) + " cases")
     case_counts.append(cases)
     rest_of_world = rest_of_world - cases
-    print(country + " - " + str(cases)) #+ " " + str(percent))
 
-countries.append("Rest of World - " + str(rest_of_world))
+countries.append("Rest of World - " + str(rest_of_world) + " cases")
 case_counts.append(rest_of_world)
 explode = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1) # detach the Rest of World slice of the pie
 
@@ -49,6 +48,7 @@ plt.pie(case_counts,
         startangle=90,
         colors=slice_colors,
         radius=2)
-plt.title('COVID-19 Case Distribution by Country\nThere have been ' + str(total_cases) + ' global cases.')
+plt.title('COVID-19 Case Distribution by Country\nThere have been ' + str(total_cases) +
+          ' global cases as of ' + time.strftime("%m/%d/%Y", time.localtime()))
 plt.axis('equal')
 plt.show()
